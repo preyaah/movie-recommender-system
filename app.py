@@ -9,13 +9,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 # ==============================
 #  STEP 1: PREPARE DATA
 # ==============================
-
-# Check if pickle files exist; if not, create them
 if not (os.path.exists('movie_list.pkl') and os.path.exists('similarity.pkl')):
-    st.write("Generating movie data files... (this will run once)")
+    st.write("🔄 Generating movie data files... (runs only once)")
 
-    # Download dataset from Kaggle or use local file
-    # You can replace with your own movie dataset if available
+    # Dataset source (public TMDB dataset)
     url = "https://raw.githubusercontent.com/themlphdstudent/streamlit-movie-recommender/main/tmdb_5000_movies.csv"
     movies = pd.read_csv(url)
 
@@ -27,7 +24,6 @@ if not (os.path.exists('movie_list.pkl') and os.path.exists('similarity.pkl')):
 
     similarity = cosine_similarity(vectors)
 
-    # Save pickle files
     pickle.dump(movies, open('movie_list.pkl', 'wb'))
     pickle.dump(similarity, open('similarity.pkl', 'wb'))
 
@@ -40,7 +36,6 @@ similarity = pickle.load(open('similarity.pkl', 'rb'))
 # ==============================
 #  STEP 3: HELPER FUNCTIONS
 # ==============================
-
 def fetch_poster(movie_id):
     try:
         url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US"
@@ -73,7 +68,7 @@ def recommend(movie):
 st.title("🎥 Movie Recommender System")
 
 movie_list = movies['title'].values
-selected_movie = st.selectbox("Type or select a movie from the dropdown", movie_list)
+selected_movie = st.selectbox("🎬 Type or select a movie from the dropdown", movie_list)
 
 if st.button('Show Recommendations'):
     recommended_movie_names, recommended_movie_posters = recommend(selected_movie)
